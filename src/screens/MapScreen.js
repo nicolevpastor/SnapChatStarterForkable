@@ -60,6 +60,21 @@ export default function MapScreen({ navigation }) {
         showsMyLocationButton={true}
       />
 
+      <View style={[styles.mapHeader]}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("GhostPins");
+          }}
+        >
+          <View style={styles.myBitmoji}>
+            <Ionicons name="heart" size={45} color="red" />
+            <View style={styles.bitmojiTextContainer}>
+              <Text style={styles.bitmojiText}>GhostPins</Text>
+            </View>
+          </View>
+        </Pressable>
+      </View>
+
       <View style={[styles.mapFooter]}>
         <View style={styles.locationContainer}>
           <TouchableOpacity
@@ -198,4 +213,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   calendarIcon: {},
+  mapHeader: {
+    position: "absolute",
+    paddingTop: 75,
+    paddingRight: 25,
+    top: 0,
+    right: 0,
+  },
+
 });

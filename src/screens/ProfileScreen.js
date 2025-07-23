@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { findAstrologySign } from "../utils/hooks/findAstrologySign";
 import { useAuthentication } from "../utils/hooks/useAuthentication";
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const handleSignOut = async () => {
@@ -18,6 +19,8 @@ const handleSignOut = async () => {
     console.error("Unexpected error:", error);
   }
 };
+
+//global state variables , change them and all components reference the global state var 
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
