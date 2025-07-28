@@ -1,3 +1,44 @@
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/github_username/repo_name">
+    <img src="./SEA Logomark.png" alt="Logo" width="180" height="80">
+  </a>
+
+<h3 align="center">project_title</h3>
+
+  <p align="center">
+    SHORT project_description (Ex. Todo App)
+    <br />
+    <a href="https://github.com/github_username/repo_name"><strong>Explore the Docs Link»</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/github_username/repo_name">View Demo Link</a>
+  </p>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#license">License</a></li>
+  </ol>
+</details>
+
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
