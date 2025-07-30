@@ -8,11 +8,13 @@ import {
   Text,
   TouchableOpacity,
   Pressable,
+  Alert,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+import { markers } from "../../assets/markers";
 import * as Location from "expo-location";
+import { Modal } from "react-native";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -21,10 +23,13 @@ export default function MapScreen({ navigation }) {
   const insets = useSafeAreaInsets();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [selectedPlace, setSelectedPlace] = useState("");
+
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const [currentRegion, setCurrentRegion] = useState({
-    latitude: 34.0211573,
-    longitude: -118.4503864,
+    latitude: 34.01859,
+    longitude: -118.45476,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
@@ -51,78 +56,137 @@ export default function MapScreen({ navigation }) {
   let text = "Waiting...";
   text = JSON.stringify(location);
 
+  const onMarkerSelected = (marker) => {
+    setSelectedPlace(marker.name);
+  }
+
+
   return (
-    <View style={[styles.container, { marginBottom: tabBarHeight }]}>
-      <MapView
-        style={styles.map}
-        region={currentRegion}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
-      />
+    <>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={{
+          flex: 1,
+          justifyContent: "flex-end", //CENTER
+          backgroundColor: "rgba(0,0,0,0.4)"
+        }}>
+          <View style={{
+            backgroundColor: "white", //WHITE
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            padding: 20,
+            height: "50%",
+          }}>
 
-      <View style={[styles.mapHeader]}>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("GhostPins");
-          }}
-        >
-          <View style={styles.myBitmoji}>
-            <Ionicons name="heart" size={45} color="red" />
-            <View style={styles.bitmojiTextContainer}>
-              <Text style={styles.bitmojiText}>GhostPins</Text>
-            </View>
+            {/* NOTION CUTS OFF */}
+            <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+              Place name: {selectedPlace}
+            </Text>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={{
+                marginTop: 20,
+                backgroundColor: "#eee",
+                padding: 10,
+                borderRadius: 10,
+                alignItems: "center"
+              }}
+            >
+              <Text>Close</Text>
+            </TouchableOpacity>
           </View>
-        </Pressable>
-      </View>
-
-      <View style={[styles.mapFooter]}>
-        <View style={styles.locationContainer}>
-          <TouchableOpacity
-            style={[styles.userLocation, styles.shadow]}
-            onPress={() => {
-              console.log("Go to user location!");
-              const { latitude, longitude } = location.coords;
-              setCurrentRegion({ ...currentRegion, latitude, longitude });
-            }}
-          >
-            <Ionicons name="navigate" size={15} color="black" />
-          </TouchableOpacity>
         </View>
-        <View style={[styles.bitmojiContainer, styles.shadow]}>
+      </Modal>
+
+
+      <View style={[styles.container, { marginBottom: tabBarHeight }]}>
+        <MapView
+          style={styles.map}
+          region={currentRegion}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+        >
+          {markers.map((marker, index) => (
+            <Marker key={index} coordinate={marker} onPress={() => onMarkerSelected(marker)}>
+              <Image
+                source={require('../../assets/snapchat/ghostheart.png')}
+                style={styles.markerImg}
+              />
+            </Marker>
+          ))}
+          {/* <Marker coordinate={{ latitude: location.coords.latitude, longitude: location.coords.longitude }}
+          title="My Location"
+          description="This is a marker example" /> */}
+        </MapView>
+
+        <View style={[styles.mapHeader]}>
           <Pressable
             onPress={() => {
-              navigation.navigate("Event");
+              navigation.navigate("GhostPins");
             }}
           >
             <View style={styles.myBitmoji}>
-              <Ionicons name="calendar-outline" size={50} color="gray" />
+              <Ionicons name="heart" size={45} color="red" />
               <View style={styles.bitmojiTextContainer}>
-                <Text style={styles.bitmojiText}>Events</Text>
+                <Text style={styles.bitmojiText}>GhostPins</Text>
               </View>
             </View>
           </Pressable>
+        </View>
 
-          <View style={styles.places}>
-            <Image
-              style={styles.bitmojiImage}
-              source={require("../../assets/snapchat/personalBitmoji.png")}
-            />
-            <View style={styles.bitmojiTextContainer}>
-              <Text style={styles.bitmojiText}>Places</Text>
-            </View>
+        <View style={[styles.mapFooter]}>
+          <View style={styles.locationContainer}>
+            <TouchableOpacity
+              style={[styles.userLocation, styles.shadow]}
+              onPress={() => {
+                console.log("Go to user location!");
+                const { latitude, longitude } = location.coords;
+                setCurrentRegion({ ...currentRegion, latitude, longitude });
+              }}
+            >
+              <Ionicons name="navigate" size={15} color="black" />
+            </TouchableOpacity>
           </View>
-          <View style={styles.myFriends}>
-            <Image
-              style={styles.bitmojiImage}
-              source={require("../../assets/snapchat/personalBitmoji.png")}
-            />
-            <View style={styles.bitmojiTextContainer}>
-              <Text style={styles.bitmojiText}>Friends</Text>
+          <View style={[styles.bitmojiContainer, styles.shadow]}>
+            <Pressable
+              onPress={() => {
+                navigation.navigate("Event");
+              }}
+            >
+              <View style={styles.myBitmoji}>
+                <Ionicons name="calendar-outline" size={50} color="gray" />
+                <View style={styles.bitmojiTextContainer}>
+                  <Text style={styles.bitmojiText}>Events</Text>
+                </View>
+              </View>
+            </Pressable>
+
+            <View style={styles.places}>
+              <Image
+                style={styles.bitmojiImage}
+                source={require("../../assets/snapchat/personalBitmoji.png")}
+              />
+              <View style={styles.bitmojiTextContainer}>
+                <Text style={styles.bitmojiText}>Places</Text>
+              </View>
+            </View>
+            <View style={styles.myFriends}>
+              <Image
+                style={styles.bitmojiImage}
+                source={require("../../assets/snapchat/personalBitmoji.png")}
+              />
+              <View style={styles.bitmojiTextContainer}>
+                <Text style={styles.bitmojiText}>Friends</Text>
+              </View>
             </View>
           </View>
         </View>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -146,6 +210,10 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
+  },
+  markerImg: {
+    width: 35,
+    height: 35,
   },
   locationContainer: {
     backgroundColor: "transparent",
